@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ZH-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link th:href="@{/layui/css/layui.css}" rel="stylesheet" media="all">
+</head>
+<body>
+<blockquote class="layui-elem-quote news_search">
+    <div class="layui-inline">
+        <input type="text" name="username" placeholder="请输入物品名称" autocomplete="off" class="layui-input search_input">
+    </div>
+    <div class="layui-inline">
+        <a class="layui-btn layui-btn-normal search_btn">搜索</a>
+    </div>
+</blockquote>
+<div class="layui-form news_list">
+    <table class="layui-table">
+        <colgroup>
+            <col>
+            <col>
+            <col>
+            <col>
+            <col>
+        </colgroup>
+        <thead>
+        <tr>
+            <th><input type="checkbox" name="" lay-skin="primary" lay-filter="allChoose" id="allChoose"></th>
+            <th>物品名称</th>
+            <th>供应商名称</th>
+            <th>库存数量</th>
+            <th>状态</th>
+        </tr>
+        </thead>
+        <tbody class="news_content"></tbody>
+    </table>
+</div>
+<div id="page"></div>
+<script th:src="@{/layui/layui.js}"></script>
+<script>
+    layui.use(['form', 'layedit', 'laydate','laypage'], function() {
+        var form = layui.form(),
+            laypage = layui.laypage,
+            $ = layui.jquery;
+
+        //加载数据
+        $.get("/stock/num", function(data){
+            newsList(data);
+        });
+
+        function newsList(that){
+            //渲染数据
+            function renderDate(data,curr){
+                var dataHtml = '';
+                if(!that){
+                    currData = newsData.concat().splice(curr*nums-nums, nums);
+                }else{
+                    currData = that.concat().splice(curr*nums-nums, nums);
+                }
+                if(currData.length != 0){
+                    for(var i=0;i<currData.length;i++){
+                        dataHtml += '<tr>'
+                            +'<td><input type="checkbox" name="checked" lay-skin="primary" lay-filter="choose"></td>'
+                            +'<td>'+currData[i].goodsName+'</td>'
+                            +'<td>'+currData[i].supplierName+'</td>'
+                            +'<td>'+currData[i].goodsAmt+'</td>';
+
+                        if(currData[i].status == 1){
+                            dataHtml += '<td style="color:#f00">库存不足</td>';
+                        }else{
+                            dataHtml += '<td style="color:#0f0">库存充足</td>';
+                        }
+
+                        dataHtml +='</tr>';
+                    }
+                }else{
+                    dataHtml = '<tr><td colspan="8">暂无数据</td></tr>';
+                }
+                return dataHtml;
+            }
+
+            //分页
+            var nums = 10; //每页出现的数据量
+            if(that){
+                newsData = that;
+            }
+            laypage({
+                cont : "page",
+                pages : Math.ceil(newsData.length/nums),
+                jump : function(obj){
+                    $(".news_content").html(renderDate(newsData,obj.curr));
+                    $('.news_list thead input[type="checkbox"]').prop("checked",false);
+                    form.render();
+                }
+            })
+        }
+
+        //查询
+        $(".search_btn").click(function(){
+            if($(".search_input").val() != ''){
+                var index = layer.msg('查询中，请稍候',{icon: 16,time:false,shade:0.8});
+                $.ajax({
+                    url : "/stock/search?type=rk&keyword="+$(".search_input").val(),
+                    type : "get",
+                    success : function(data){
+                        newsList(data);
+                    }
+                })
+                layer.close(index);
+            }else{
+                layer.msg("请输入需要查询的内容");
+            }
+        });
+
+    })
+</script>
+</body>
+</html>
