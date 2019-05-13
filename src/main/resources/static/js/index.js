@@ -124,14 +124,15 @@ layui.config({
         })
     })
 
-    console.log(sessionStorage.getItem("user"));
     $(".UserName").html(sessionStorage.getItem("user"));
 
     //退出
     $(".signOut").click(function(){
-        window.sessionStorage.removeItem("menu");
         menu = [];
+        window.sessionStorage.removeItem("menu");
         window.sessionStorage.removeItem("curmenu");
+        window.sessionStorage.removeItem("user");
+        window.location.href="/login.html"
     })
 
     //隐藏左侧导航
