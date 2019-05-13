@@ -13,6 +13,12 @@
 	"icon" : "&#xe62e;",
 	"href" : "page/supplier.html",
 	"spread" : false
+},
+{
+	"title" : "门店",
+	"icon" : "&#xe64d;",
+	"href" : "page/store.html",
+	"spread" : false
 }, {
 	"title" : "预估",
 	"icon" : "&#xe631;",

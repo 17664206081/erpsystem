@@ -6,10 +6,21 @@ layui.config({
         layer = layui.layer,
         element = layui.element();
     $ = layui.jquery;
-    tab = layui.bodyTab({
-        openTabNum : "50",  //最大可打开窗口数量
-        url : "json/navs.json" //获取菜单json地址
-    });
+
+    var user=sessionStorage.getItem("user");
+    $(".UserName").html(user);
+
+    if(user==="admin"){
+        tab = layui.bodyTab({
+            openTabNum : "50",  //最大可打开窗口数量
+            url : "json/all.json" //获取菜单json地址
+        });
+    }else {
+        tab = layui.bodyTab({
+            openTabNum : "50",  //最大可打开窗口数量
+            url : "json/user.json" //获取菜单json地址
+        });
+    }
 
     //更换皮肤
     function skins(){
@@ -124,7 +135,7 @@ layui.config({
         })
     })
 
-    $(".UserName").html(sessionStorage.getItem("user"));
+
 
     //退出
     $(".signOut").click(function(){
