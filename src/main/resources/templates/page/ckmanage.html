@@ -76,7 +76,7 @@
         }).resize();
 
         //加载数据
-        $.get("/stock/manage/rk?keyword=", function(data){
+        $.get("/stock/manage/ck?keyword=", function(data){
             newsList(data);
         });
 
@@ -130,7 +130,7 @@
 
         $("body").on("click",".news_edit",function(){  //确认
             var _this = $(this);
-            layer.confirm('确定入库？',{icon:3, title:'提示信息'},function(index){
+            layer.confirm('确定出库？',{icon:3, title:'提示信息'},function(index){
                 $.ajax({
                     url:'/stock/yasuo/'+_this.attr("data-id"),
                     type: 'POST',
@@ -147,7 +147,7 @@
             if($(".search_input").val() != ''){
                 var index = layer.msg('查询中，请稍候',{icon: 16,time:false,shade:0.8});
                 $.ajax({
-                    url : "/stock/manage/rk?keyword="+$(".search_input").val(),
+                    url : "/stock/manage/ck?&keyword="+$(".search_input").val(),
                     type : "get",
                     success : function(data){
                         newsList(data);

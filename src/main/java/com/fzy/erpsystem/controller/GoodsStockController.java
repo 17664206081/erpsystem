@@ -149,7 +149,7 @@ public class GoodsStockController {
     }
 
     @GetMapping("/manage/{type}")
-    public List<GoodsStock> manage(@PathVariable("type") String type, @RequestParam("keyword") String keyword){
+    public List<GoodsStock> manage(@PathVariable("type") String type, @RequestParam(value = "keyword", required = false) String keyword){
         if(StringUtils.isEmpty(keyword)){
             keyword=null;
         }
