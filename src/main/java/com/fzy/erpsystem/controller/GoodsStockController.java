@@ -148,4 +148,21 @@ public class GoodsStockController {
         return list;
     }
 
+    @GetMapping("/manage/{type}")
+    public List<GoodsStock> manage(@PathVariable("type") String type, @RequestParam("keyword") String keyword){
+        if(StringUtils.isEmpty(keyword)){
+            keyword=null;
+        }
+        return goodsStockMapper.manage(type,keyword);
+    }
+
+
+    @PostMapping("/yasuo/{id}")
+    public Map yasuo(@PathVariable("id") Long id){
+        Map map=new HashMap();
+        goodsStockMapper.yasuo(id);
+        map.put("code","200");
+        return map;
+    }
+
 }
