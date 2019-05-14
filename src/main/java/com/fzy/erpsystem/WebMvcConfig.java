@@ -27,7 +27,19 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addViewController("/page/addout.html").setViewName("/page/addout");
         registry.addViewController("/page/estimate.html").setViewName("/page/estimate");
         registry.addViewController("/page/store.html").setViewName("/page/store");
-        registry.addViewController("/page/addstore.html").setViewName("/page/addstore");
+        registry.addViewController("/page/addStore.html").setViewName("/page/addStore");
+
+        registry.addViewController("/page/goods.html").setViewName("/page/goods");
+        registry.addViewController("/page/addgoods.html").setViewName("/page/addgoods");
+
+        registry.addViewController("/page/rkmanage.html").setViewName("/page/rkmanage");
+        registry.addViewController("/page/ckmanage.html").setViewName("/page/ckmanage");
+
+
+        registry.addViewController("/page/xsreport.html").setViewName("/page/xsreport");
+        registry.addViewController("/page/cgreport.html").setViewName("/page/cgreport");
+        registry.addViewController("/page/kcreport.html").setViewName("/page/kcreport");
+
     }
 
 }

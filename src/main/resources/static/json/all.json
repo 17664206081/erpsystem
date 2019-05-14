@@ -19,9 +19,61 @@
 	"icon" : "&#xe64d;",
 	"href" : "page/store.html",
 	"spread" : false
-}, {
+},
+{
+	"title" : "物品",
+	"icon" : "&#xe64d;",
+	"href" : "page/goods.html",
+	"spread" : false
+},{
 	"title" : "预估",
 	"icon" : "&#xe631;",
 	"href" : "page/estimate.html",
 	"spread" : false
+},
+{
+	"title" : "库存管理",
+	"icon" : "&#xe636;",
+	"href" : "",
+	"spread" : false,
+	"children" : [
+		{
+			"title" : "入库管理",
+			"href" : "page/rkmanage.html",
+			"spread" : false
+		},
+		{
+			"title" : "出库管理",
+			"href" : "page/ckmanage.html",
+			"spread" : false
+		},
+		{
+			"title" : "库存预警",
+			"href" : "page/stock.html",
+			"spread" : false
+		}
+	]
+},
+{
+	"title" : "报表",
+	"icon" : "icon-lingsheng",
+	"href" : "",
+	"spread" : false,
+	"children" : [
+		{
+			"title" : "采购报表",
+			"href" : "page/cgreport.html",
+			"spread" : false
+		},
+		{
+			"title" : "库存余量表",
+			"href" : "page/kcreport.html",
+			"spread" : false
+		},
+		{
+			"title" : "销售报表",
+			"href" : "page/xsreport.html",
+			"spread" : false
+		}
+	]
 }]

@@ -14,32 +14,46 @@
 <body>
 <form class="layui-form">
     <div class="layui-form-item">
+        <label class="layui-form-label" >门店名称</label>
+        <div class="layui-input-inline" style="width: 500px">
+            <select name="storeId" id="storeId">
+                <option value="">请选择门店</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
         <label class="layui-form-label">供应商名称</label>
-        <div class="layui-input-inline">
-            <select name="supplierName" id="accountId">
+        <div class="layui-input-inline" style="width: 500px">
+            <select  lay-filter="supplierId" name="supplierId" id="supplierId">
                 <option value="">请选择供应商</option>
             </select>
         </div>
     </div>
+
     <div class="layui-form-item">
         <label class="layui-form-label">物品名称</label>
-        <div class="layui-input-block">
-            <input type="text" class="layui-input" placeholder="物品名称" name="goodsName">
+        <div class="layui-input-inline" style="width: 500px">
+            <select lay-filter="goodsId" name="goodsId" id="goodsId" lay-verify="" lay-search>
+                <option value="">请选择物品</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">物品单价</label>
+        <div class="layui-input-block" style="width: 500px">
+            <input type="text" id="goodsPrice" class="layui-input" placeholder="物品单价" name="goodsPrice">
         </div>
     </div>
 
     <div class="layui-form-item">
         <label class="layui-form-label">物品数量</label>
-        <div class="layui-input-block">
+        <div class="layui-input-block" style="width: 500px">
             <input type="text" class="layui-input" placeholder="物品数量" name="goodsAmt">
         </div>
     </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">物品单价</label>
-        <div class="layui-input-block">
-            <input type="text" class="layui-input" placeholder="物品单价" name="goodsPrice">
-        </div>
-    </div>
+
     <div class="layui-form-item">
         <div class="layui-input-block">
             <button class="layui-btn"  lay-submit=""  lay-filter="addNews">立即提交</button>
@@ -55,13 +69,52 @@
             $ = layui.jquery;
 
         $.get("/supplier", function(data){
-            $.each(data, function (index,item) {
+            $.each(data, function (index) {
                 var id = data[index].id;
                 var value = data[index].name;
                 //构造动态option
-                $('#accountId').append("<option value='"+id+"'>"+value+"</option>")
-            })
+                $('#supplierId').append("<option value='"+id+"'>"+value+"</option>")
+            });
             form.render('select');
+        });
+
+        $.get("/store", function(data){
+            $.each(data, function (index) {
+                var id = data[index].id;
+                var value = data[index].name;
+                //构造动态option
+                $('#storeId').append("<option value='"+id+"'>"+value+"</option>")
+            });
+            form.render('select');
+        });
+
+        var goods=[];
+
+        //加载物品
+        form.on('select(supplierId)', function(data){
+            $.get("/goods/"+data.value, function(data){
+                goods=data;
+                //清空
+                $('#goodsId').empty("");
+                $('#goodsId').append("<option value=>请选择物品</option>")
+                $.each(data, function (index) {
+                    var id = data[index].id;
+                    var value = data[index].goodsName;
+                    //构造动态option
+                    $('#goodsId').append("<option value='"+id+"'>"+value+"</option>")
+                })
+                form.render('select');
+            });
+        });
+
+        form.on('select(goodsId)', function(data){
+            for (var j=0; j<goods.length;j++){
+                if(parseInt(data.value)===goods[j].id){
+                    $('#goodsPrice').val(goods[j].price);
+                    break;
+                }
+            }
+
         });
 
         //添加

@@ -31,9 +31,9 @@
         </colgroup>
         <thead>
         <tr>
-            <th><input type="checkbox" name="" lay-skin="primary" lay-filter="allChoose" id="allChoose"></th>
+            <th style="text-align: center"><input  type="checkbox" name="" lay-skin="primary" lay-filter="allChoose" id="allChoose"></th>
+            <th>门店名称</th>
             <th>物品名称</th>
-            <th>供应商名称</th>
             <th>库存数量</th>
             <th>状态</th>
         </tr>
@@ -66,9 +66,9 @@
                 if(currData.length != 0){
                     for(var i=0;i<currData.length;i++){
                         dataHtml += '<tr>'
-                            +'<td><input type="checkbox" name="checked" lay-skin="primary" lay-filter="choose"></td>'
+                            +'<td  align="center"><input type="checkbox" name="checked" lay-skin="primary" lay-filter="choose"></td>'
+                            +'<td>'+currData[i].storeName+'</td>'
                             +'<td>'+currData[i].goodsName+'</td>'
-                            +'<td>'+currData[i].supplierName+'</td>'
                             +'<td>'+currData[i].goodsAmt+'</td>';
 
                         if(currData[i].status == 1){

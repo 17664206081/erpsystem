@@ -14,7 +14,7 @@
 <body>
 <blockquote class="layui-elem-quote news_search">
     <div class="layui-inline">
-        <input type="text" name="username" placeholder="请输入订单号" autocomplete="off" class="layui-input search_inputy">
+        <input type="text" name="username" placeholder="请输入订单号" autocomplete="off" class="layui-input search_input">
     </div>
     <div class="layui-inline">
         <a class="layui-btn layui-btn-normal search_btn">搜索</a>
@@ -38,6 +38,7 @@
         <tr>
             <th><input type="checkbox" name="" lay-skin="primary" lay-filter="allChoose" id="allChoose"></th>
             <th style="text-align:left;">单号</th>
+            <th>门店名称</th>
             <th>物品名称</th>
             <th>供应商名称</th>
             <th>数量</th>
@@ -96,13 +97,21 @@
                         dataHtml += '<tr>'
                             +'<td><input type="checkbox" name="checked" lay-skin="primary" lay-filter="choose"></td>'
                             +'<td align="left">'+currData[i].id+'</td>'
+                            +'<td>'+currData[i].storeName+'</td>'
                             +'<td>'+currData[i].goodsName+'</td>'
                             +'<td>'+currData[i].supplierName+'</td>'
                             +'<td>'+currData[i].goodsAmt+'</td>'
                             +'<td>'+currData[i].goodsPrice+'</td>'
-                            +'<td>'+(currData[i].goodsPrice*+currData[i].goodsAmt)+'</td>'
-                            +'<td>'+currData[i].time+'</td>'
-                            +'</tr>';
+                            +'<td>'+(currData[i].goodsPrice*+currData[i].goodsAmt)+'</td>';
+
+                        if(currData[i].buseDate==null){
+                            dataHtml += '<td></td>'
+                                +'</tr>';
+                        }else{
+                            dataHtml += '<td>'+currData[i].buseDate+'</td>'
+                                +'</tr>';
+                        }
+
                     }
                 }else{
                     dataHtml = '<tr><td colspan="8">暂无数据</td></tr>';

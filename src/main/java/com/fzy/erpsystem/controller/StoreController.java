@@ -1,7 +1,7 @@
 package com.fzy.erpsystem.controller;
 
 import com.fzy.erpsystem.dao.StoreMapper;
-import org.apache.catalina.Store;
+import com.fzy.erpsystem.entity.Store;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -16,7 +16,7 @@ import java.util.Map;
  * @date: 2019/05/13 19:26:50
  **/
 @RestController
-@RequestMapping("/supplier")
+@RequestMapping("/store")
 public class StoreController {
 
     @Resource
@@ -37,7 +37,7 @@ public class StoreController {
     }
 
     @PutMapping
-    public Map update(@RequestBody Store store){
+    public Map updateStore(@RequestBody Store store){
         Map map=new HashMap();
         storeMapper.update(store);
         map.put("code","200");

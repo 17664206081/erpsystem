@@ -1,10 +1,10 @@
 package com.fzy.erpsystem.controller;
 
+import com.fzy.erpsystem.dao.GoodsMapper;
 import com.fzy.erpsystem.dao.GoodsStockMapper;
+import com.fzy.erpsystem.dao.StoreMapper;
 import com.fzy.erpsystem.dao.SupplierMapper;
-import com.fzy.erpsystem.entity.GoodsStock;
-import com.fzy.erpsystem.entity.Kc;
-import com.fzy.erpsystem.entity.Supplier;
+import com.fzy.erpsystem.entity.*;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.util.StringUtils;
@@ -12,7 +12,6 @@ import org.thymeleaf.util.StringUtils;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @program: GoodsStockController
@@ -28,14 +27,28 @@ public class GoodsStockController {
     private GoodsStockMapper goodsStockMapper;
 
     @Resource
+    private GoodsMapper goodsMapper;
+
+    @Resource
+    private StoreMapper storeMapper;
+
+    @Resource
     private SupplierMapper supplierMapper;
 
     @PostMapping("/addin")
     public Map addin(@RequestBody  GoodsStock goodsStock){
         Map map=new HashMap();
         goodsStock.setKc(Kc.RK);
-        Supplier one = supplierMapper.findOne(Long.parseLong(goodsStock.getSupplierName()));
+
+        Supplier one = supplierMapper.findOne(goodsStock.getSupplierId());
         goodsStock.setSupplierName(one.getName());
+
+        Store store = storeMapper.findOne(goodsStock.getStoreId());
+        goodsStock.setStoreName(store.getName());
+
+        Goods goods = goodsMapper.findone(goodsStock.getGoodsId());
+        goodsStock.setGoodsName(goods.getGoodsName());
+
         goodsStockMapper.kc(goodsStock);
         map.put("code","200");
         return map;
@@ -45,9 +58,32 @@ public class GoodsStockController {
     @PostMapping("/addout")
     public Map addout(@RequestBody  GoodsStock goodsStock){
         Map map=new HashMap();
+        List<GoodsStock> list = goodsStockMapper.findGoodsStock(goodsStock.getGoodsId(), goodsStock.getStoreId());
+        BigDecimal stockNum=BigDecimal.ZERO;
+        for (GoodsStock detail:list ){
+            if(Kc.CK.equals(detail.getKc())){
+                stockNum=stockNum.subtract(detail.getGoodsAmt());
+            }else if(Kc.RK.equals(detail.getKc())){
+                stockNum=stockNum.add(detail.getGoodsAmt());
+            }
+        }
+
+        if(stockNum.compareTo(goodsStock.getGoodsAmt())<0){
+            map.put("code","500");
+            map.put("msg","库存不足");
+            return map;
+        }
+
         goodsStock.setKc(Kc.CK);
-        Supplier one = supplierMapper.findOne(Long.parseLong(goodsStock.getSupplierName()));
+        Supplier one = supplierMapper.findOne(goodsStock.getSupplierId());
         goodsStock.setSupplierName(one.getName());
+
+        Store store = storeMapper.findOne(goodsStock.getStoreId());
+        goodsStock.setStoreName(store.getName());
+
+        Goods goods = goodsMapper.findone(goodsStock.getGoodsId());
+        goodsStock.setGoodsName(goods.getGoodsName());
+
         goodsStockMapper.kc(goodsStock);
         map.put("code","200");
         return map;
@@ -77,7 +113,7 @@ public class GoodsStockController {
         Map<String,GoodsStock> stockenum=new HashMap<>();
 
         for (GoodsStock detail:num ){
-            if(!stockenum.containsKey(detail.getGoodsName())){
+            if(!stockenum.containsKey(detail.getStoreId()+"_"+detail.getGoodsId())){
                 BigDecimal kucushu=BigDecimal.ZERO;
                 if(Kc.RK.equals(detail.getKc())){
                     kucushu = kucushu.add(detail.getGoodsAmt());
@@ -85,9 +121,9 @@ public class GoodsStockController {
                     kucushu = kucushu.subtract(detail.getGoodsAmt());
                 }
                 detail.setGoodsAmt(kucushu);
-                stockenum.put(detail.getGoodsName(),detail);
+                stockenum.put(detail.getStoreId()+"_"+detail.getGoodsId(),detail);
             }else {
-                GoodsStock goodsStock = stockenum.get(detail.getGoodsName());
+                GoodsStock goodsStock = stockenum.get(detail.getStoreId()+"_"+detail.getGoodsId());
                 BigDecimal decimal = goodsStock.getGoodsAmt();
                 if(Kc.RK.equals(detail.getKc())){
                     decimal = decimal.add(detail.getGoodsAmt());
@@ -95,13 +131,13 @@ public class GoodsStockController {
                     decimal = decimal.subtract(detail.getGoodsAmt());
                 }
                 goodsStock.setGoodsAmt(decimal);
-                stockenum.put(detail.getGoodsName(),goodsStock);
+                stockenum.put(detail.getStoreId()+"_"+detail.getGoodsId(),goodsStock);
             }
         }
          List<GoodsStock> list=new ArrayList(stockenum.size());
          stockenum.forEach((k,v)->{
-             BigDecimal bigDecimal = new BigDecimal(5);
-             if(v.getGoodsAmt().compareTo(bigDecimal)>0){
+             Goods goods = goodsMapper.findone(v.getGoodsId());
+             if(v.getGoodsAmt().compareTo(goods.getStock())>0){
                  v.setStatus(1);
              }else {
                  v.setStatus(0);

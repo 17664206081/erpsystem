@@ -17,18 +17,26 @@ public class GoodsStock {
 
     private Long id;
 
+    private Long storeId;
+
+    private String storeName;
+
+    private Long goodsId;
+
     private String goodsName;
 
     private BigDecimal goodsAmt;
 
     private BigDecimal goodsPrice;
 
+    private Long supplierId;
+
     private String supplierName;
 
     private Kc kc;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private Date time;
+    private Date buseDate;
 
     private Integer status;
 

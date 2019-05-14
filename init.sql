@@ -8,10 +8,10 @@ CREATE TABLE erpsysteam.t_goods_stock
     time datetime DEFAULT CURRENT_TIMESTAMP,
     kc enum('CK', 'RK')
 );
-INSERT INTO erpsysteam.t_goods_stock (id, goods_name, supplier_name, goods_amt, goods_price, time, kc) VALUES (7, '辣椒', '工艺案例', 2.00000000, 1.50000000, '2019-05-13 10:09:29', 'RK');
-INSERT INTO erpsysteam.t_goods_stock (id, goods_name, supplier_name, goods_amt, goods_price, time, kc) VALUES (8, '辣椒', '工艺案例', 1.00000000, 1.50000000, '2019-05-13 10:11:20', 'CK');
-INSERT INTO erpsysteam.t_goods_stock (id, goods_name, supplier_name, goods_amt, goods_price, time, kc) VALUES (9, '辣椒', '工艺案例', 6.00000000, 1.50000000, '2019-05-13 11:02:40', 'RK');
-INSERT INTO erpsysteam.t_goods_stock (id, goods_name, supplier_name, goods_amt, goods_price, time, kc) VALUES (10, '辣椒', '工艺案例', 5.00000000, 1.50000000, '2019-05-13 11:04:30', 'CK');
+INSERT INTO erpsysteam.t_goods_stock (id, goods_name, supplier_name, goods_amt, goods_price, buse_date, kc) VALUES (7, '辣椒', '工艺案例', 2.00000000, 1.50000000, '2019-05-13 10:09:29', 'RK');
+INSERT INTO erpsysteam.t_goods_stock (id, goods_name, supplier_name, goods_amt, goods_price, buse_date, kc) VALUES (8, '辣椒', '工艺案例', 1.00000000, 1.50000000, '2019-05-13 10:11:20', 'CK');
+INSERT INTO erpsysteam.t_goods_stock (id, goods_name, supplier_name, goods_amt, goods_price, buse_date, kc) VALUES (9, '辣椒', '工艺案例', 6.00000000, 1.50000000, '2019-05-13 11:02:40', 'RK');
+INSERT INTO erpsysteam.t_goods_stock (id, goods_name, supplier_name, goods_amt, goods_price, buse_date, kc) VALUES (10, '辣椒', '工艺案例', 5.00000000, 1.50000000, '2019-05-13 11:04:30', 'CK');
 CREATE TABLE erpsysteam.t_supplier
 (
     id int(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,

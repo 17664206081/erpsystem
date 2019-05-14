@@ -1,7 +1,7 @@
 package com.fzy.erpsystem.dao;
 
-import com.fzy.erpsystem.entity.Supplier;
-import org.apache.catalina.Store;
+
+import com.fzy.erpsystem.entity.Store;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -12,6 +12,7 @@ import java.util.List;
  * @author: fzy
  * @date: 2019/05/13 19:19:19
  **/
+@Mapper
 public interface StoreMapper {
 
     @Insert("insert INTO t_store(name, address, phone) values(#{name},#{address},#{phone})")
