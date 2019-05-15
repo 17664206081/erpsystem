@@ -13,17 +13,22 @@
 </head>
 <body>
 <blockquote class="layui-elem-quote news_search">
-    <div class="layui-inline">
-        <label class="layui-form-label" >门店名称:</label>
-        <div class="layui-input-inline">
-            <select name="storeId" id="storeId" lay-search>
-                <option value="">请选择门店</option>
-            </select>
+
+    <form class="layui-form">
+        <div class="layui-inline">
+            <label class="layui-form-label" >门店名称</label>
+            <div class="layui-input-inline">
+                <select name="storeId" id="storeId" lay-search>
+                    <option value="">请选择门店</option>
+                </select>
+            </div>
         </div>
-    </div>
-    <div class="layui-inline">
-        <a class="layui-btn layui-btn-normal search_btn">搜索</a>
-    </div>
+
+        <div class="layui-inline">
+            <a class="layui-btn layui-btn-normal search_btn">搜索</a>
+        </div>
+    </form>
+
 </blockquote>
 <div class="layui-form news_list">
     <table class="layui-table">
