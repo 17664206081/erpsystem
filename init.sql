@@ -23,8 +23,9 @@ CREATE TABLE erpsysteam.t_goods_stock
     store_name varchar(200),
     supplier_id int(11)
 );
-INSERT INTO erpsysteam.t_goods_stock (id, goods_name, supplier_name, goods_amt, goods_price, buse_date, kc, goods_id, store_id, store_name, supplier_id) VALUES (14, '辣椒', '工艺案例', 8.00000000, 1.20000000, null, 'RK', 2, 2, '张三店', 5);
-INSERT INTO erpsysteam.t_goods_stock (id, goods_name, supplier_name, goods_amt, goods_price, buse_date, kc, goods_id, store_id, store_name, supplier_id) VALUES (15, '辣椒', '工艺案例', 5.00000000, 1.20000000, null, 'CK', 2, 2, '张三店', 5);
+INSERT INTO erpsysteam.t_goods_stock (id, goods_name, supplier_name, goods_amt, goods_price, buse_date, kc, goods_id, store_id, store_name, supplier_id) VALUES (14, '辣椒', '工艺案例', 8.00000000, 1.20000000, '2019-05-15 00:02:01', 'RK', 2, 2, '张三店', 5);
+INSERT INTO erpsysteam.t_goods_stock (id, goods_name, supplier_name, goods_amt, goods_price, buse_date, kc, goods_id, store_id, store_name, supplier_id) VALUES (15, '辣椒', '工艺案例', 5.00000000, 1.20000000, '2019-05-15 08:19:23', 'CK', 2, 2, '张三店', 5);
+INSERT INTO erpsysteam.t_goods_stock (id, goods_name, supplier_name, goods_amt, goods_price, buse_date, kc, goods_id, store_id, store_name, supplier_id) VALUES (16, '辣椒', '工艺案例', 2.00000000, 1.20000000, null, 'CK', 2, 2, '张三店', 5);
 CREATE TABLE erpsysteam.t_store
 (
     id int(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
