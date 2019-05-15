@@ -52,4 +52,16 @@ public interface GoodsStockMapper {
 
     @Update("update t_goods_stock set buse_date= now() where id=#{id}")
     int yasuo(Long id);
+
+
+
+    @Select("<script>"
+            +"select * from t_goods_stock where kc=#{type}"
+            +"<if test= 'storeId!=null' >"
+            + "and store_id=#{storeId}"
+            + "</if>"
+            +"and buse_date is not null"
+            + "</script>")
+    List<GoodsStock> report(@Param("type") String type, @Param("storeId") Long storeId);
+
 }
