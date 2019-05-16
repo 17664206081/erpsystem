@@ -5,12 +5,11 @@ import com.fzy.erpsystem.entity.GoodsStock;
 import com.fzy.erpsystem.entity.Kc;
 import com.fzy.erpsystem.entity.User;
 import jdk.nashorn.internal.runtime.logging.Logger;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @program: ReportController
@@ -36,8 +35,43 @@ public class ReportController {
     }
 
     @GetMapping("/kc")
-    public List<GoodsStock> findAllkc(@RequestParam("storeId") String storeId){
-        return Collections.emptyList();
+    public List<GoodsStock> findAllkc(@RequestParam("storeId") Long storeId){
+        Map<String,GoodsStock> all=new HashMap<>();
+        List<GoodsStock> rklist = goodsStockMapper.report(Kc.RK + "", storeId);
+        if(!CollectionUtils.isEmpty(rklist)){
+            rklist.forEach(detail -> {
+               if(!Objects.isNull(all.get(generate(detail)))){
+                   GoodsStock goodsStock = all.get(generate(detail));
+                   detail.setGoodsAmt(goodsStock.getGoodsAmt().add(detail.getGoodsAmt()));
+               }
+                   all.put(generate(detail),detail);
+
+            });
+        }
+
+        List<GoodsStock> cklist = goodsStockMapper.report(Kc.CK + "", storeId);
+        if(!CollectionUtils.isEmpty(cklist)){
+            cklist.forEach(detail -> {
+                if(!Objects.isNull(all.get(generate(detail)))){
+                    GoodsStock goodsStock = all.get(generate(detail));
+                    detail.setGoodsAmt(goodsStock.getGoodsAmt().subtract(detail.getGoodsAmt()));
+                }
+                all.put(generate(detail),detail);
+
+            });
+        }
+
+        List<GoodsStock> alllist=new ArrayList<>();
+        all.forEach((k,v)->{
+            alllist.add(v);
+        });
+
+        return alllist;
+    }
+
+
+    public String generate (GoodsStock stock){
+        return stock.getStoreId()+"_"+stock.getStoreId()+"_" +stock.getGoodsId();
     }
 
 }

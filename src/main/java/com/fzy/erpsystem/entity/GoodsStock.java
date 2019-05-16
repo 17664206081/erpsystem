@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * @program: GoodsStock
@@ -35,9 +36,28 @@ public class GoodsStock {
 
     private Kc kc;
 
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date buseDate;
 
     private Integer status;
 
+   /* @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        GoodsStock that = (GoodsStock) o;
+        return Objects.equals(storeId, that.storeId) &&
+                Objects.equals(goodsId, that.goodsId) &&
+                Objects.equals(supplierId, that.supplierId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(storeId, goodsId, supplierId);
+    }*/
 }
+
