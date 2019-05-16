@@ -1,34 +1,22 @@
 [{
-	"title" : "请购",
-	"icon" : "&#xe636;",
-	"href" : "page/in.html",
-	"spread" : false
-},{
-	"title" : "销售",
-	"icon" : "&#xe64c;",
-	"href" : "page/out.html",
-	"spread" : false
-},{
-	"title" : "供应商",
-	"icon" : "&#xe62e;",
-	"href" : "page/supplier.html",
-	"spread" : false
-},
-{
-	"title" : "门店",
+	"title" : "门店管理",
 	"icon" : "&#xe64d;",
 	"href" : "page/store.html",
 	"spread" : false
-},
-{
-	"title" : "物品",
+},{
+	"title" : "物品管理",
 	"icon" : "&#xe64d;",
 	"href" : "page/goods.html",
 	"spread" : false
 },{
-	"title" : "预估",
-	"icon" : "&#xe631;",
-	"href" : "page/estimate.html",
+	"title" : "供应商管理",
+	"icon" : "&#xe62e;",
+	"href" : "page/supplier.html",
+	"spread" : false
+},{
+	"title" : "门店请购管理",
+	"icon" : "&#xe636;",
+	"href" : "page/in.html",
 	"spread" : false
 },
 {
@@ -53,9 +41,18 @@
 			"spread" : false
 		}
 	]
-},
-{
-	"title" : "报表",
+},{
+	"title" : "销售管理",
+	"icon" : "&#xe64c;",
+	"href" : "page/out.html",
+	"spread" : false
+},{
+	"title" : "预估管理",
+	"icon" : "&#xe631;",
+	"href" : "page/estimate.html",
+	"spread" : false
+},{
+	"title" : "报表管理",
 	"icon" : "icon-lingsheng",
 	"href" : "",
 	"spread" : false,
