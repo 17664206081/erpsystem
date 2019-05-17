@@ -101,7 +101,7 @@ public class GoodsStockController {
     }
 
     @GetMapping("/num")
-    public List<GoodsStock> findStock(@RequestParam("keyword") String keyword){
+    public List<GoodsStock> findStock(@RequestParam(value = "keyword" ,required = false) String keyword){
         if(StringUtils.isEmpty(keyword)){
             keyword=null;
         }
