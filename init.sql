@@ -34,6 +34,7 @@ CREATE TABLE erpsysteam.t_store
     phone varchar(16)
 );
 INSERT INTO erpsysteam.t_store (id, name, address, phone) VALUES (2, '张三店', '11221', '1786578');
+INSERT INTO erpsysteam.t_store (id, name, address, phone) VALUES (3, '李四店', '222', '22');
 CREATE TABLE erpsysteam.t_supplier
 (
     id int(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
