@@ -13,12 +13,43 @@
 </head>
 <body>
 <blockquote class="layui-elem-quote news_search">
-    <div class="layui-inline">
-        <input type="text" name="username" placeholder="请输入物品名称" autocomplete="off" class="layui-input search_input">
-    </div>
-    <div class="layui-inline">
-        <a class="layui-btn layui-btn-normal search_btn">搜索</a>
-    </div>
+    <form class="layui-form">
+        <div class="layui-inline">
+            <label class="layui-form-label" >门店</label>
+            <div class="layui-input-inline">
+                <select name="storeId" id="storeId" lay-search>
+                    <option value="">请选择门店</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-inline">
+            <label class="layui-form-label" >物品</label>
+            <div class="layui-input-inline">
+                <select name="goodId" id="goodId" lay-search>
+                    <option value="">请选择物品</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-inline">
+            <label class="layui-form-label">预估日期</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" id="estimateDate" name="estimateDate" placeholder="请选择预估日期">
+            </div>
+        </div>
+
+        <div class="layui-inline">
+            <label class="layui-form-label">参考日期</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" id="consultDate" name="consultDate" placeholder="请选择参考日期">
+            </div>
+        </div>
+
+        <div class="layui-inline" style="margin-left: 570px">
+            <button class="layui-btn layui-btn-normal"  lay-submit=""  lay-filter="search_btn">搜索</button>
+        </div>
+    </form>
 </blockquote>
 <div class="layui-form news_list">
     <table class="layui-table">
@@ -31,27 +62,57 @@
         </colgroup>
         <thead>
         <tr>
-            <th><input type="checkbox" name="" lay-skin="primary" lay-filter="allChoose" id="allChoose"></th>
-            <th>物品名称</th>
-            <th>供应商名称</th>
-            <th>库存数量</th>
-            <th>状态</th>
+            <th>预估日期</th>
+            <th>星期</th>
+            <th>物品</th>
+            <th>参考日营业额</th>
+            <th>预估营业额</th>
         </tr>
         </thead>
         <tbody class="news_content"></tbody>
     </table>
 </div>
 <div id="page"></div>
+<script th:src="@{/laydate/laydate.js}"></script>
 <script th:src="@{/layui/layui.js}"></script>
 <script>
-    layui.use(['form', 'layedit', 'laydate','laypage'], function() {
+    layui.use(['form','laydate','laypage'], function() {
         var form = layui.form(),
             laypage = layui.laypage,
+            laydate  = layui.laydate,
             $ = layui.jquery;
 
-        //加载数据
-        $.get("/stock/num", function(data){
-            newsList(data);
+        $.get("/store", function(data){
+            $.each(data, function (index) {
+                var id = data[index].id;
+                var value = data[index].name;
+                //构造动态option
+                $('#storeId').append("<option value='"+id+"'>"+value+"</option>")
+            });
+            form.render('select');
+        });
+
+
+        $.get("/goods", function(data){
+            $.each(data, function (index) {
+                var id = data[index].id;
+                var value = data[index].goodsName;
+                //构造动态option
+                $('#goodId').append("<option value='"+id+"'>"+value+"</option>")
+            })
+            form.render('select');
+        });
+
+        laydate.render({
+            elem : '#estimateDate',
+            min: getNowFormatDate(1),
+            range: true
+        });
+
+        laydate.render({
+            elem : '#consultDate',
+            max: getNowFormatDate(0),
+            range: true
         });
 
         function newsList(that){
@@ -66,18 +127,12 @@
                 if(currData.length != 0){
                     for(var i=0;i<currData.length;i++){
                         dataHtml += '<tr>'
-                            +'<td><input type="checkbox" name="checked" lay-skin="primary" lay-filter="choose"></td>'
+                            +'<td>'+currData[i].estimateDate+'</td>'
+                            +'<td>'+currData[i].week+'</td>'
                             +'<td>'+currData[i].goodsName+'</td>'
-                            +'<td>'+currData[i].supplierName+'</td>'
-                            +'<td>'+currData[i].goodsAmt+'</td>';
-
-                        if(currData[i].status == 1){
-                            dataHtml += '<td style="color:#f00">库存不足</td>';
-                        }else{
-                            dataHtml += '<td style="color:#0f0">库存充足</td>';
-                        }
-
-                        dataHtml +='</tr>';
+                            +'<td>'+currData[i].consultBusiness+'</td>'
+                            +'<td>'+currData[i].estimateBusiness+'</td>'
+                            +'</tr>';
                     }
                 }else{
                     dataHtml = '<tr><td colspan="8">暂无数据</td></tr>';
@@ -101,21 +156,39 @@
             })
         }
 
-        //查询
-        $(".search_btn").click(function(){
-            if($(".search_input").val() != ''){
-                var index = layer.msg('查询中，请稍候',{icon: 16,time:false,shade:0.8});
+        function getNowFormatDate(days) {
+            var date = new Date();
+            date.setDate(date.getDate()+days)
+            var seperator1 = "-";
+            var year = date.getFullYear();
+            var month = date.getMonth() + 1;
+            var strDate = date.getDate();
+            if (month >= 1 && month <= 9) {
+                month = "0" + month;
+            }
+            if (strDate >= 0 && strDate <= 9) {
+                strDate = "0" + strDate;
+            }
+            var currentdate = year + seperator1 + month + seperator1 + strDate;
+            return currentdate;
+        }
+
+        form.on("submit(search_btn)",function(data){
+            var field =data.field;
+            if(field.storeId==="" || field.goodId==="" || field. estimateDate==="" || field.consultDate==="" ){
+                layer.msg("请输入必填参数");
+            }else{
                 $.ajax({
-                    url : "/stock/search?type=rk&keyword="+$(".search_input").val(),
-                    type : "get",
+                    url : "/estimate",
+                    type: 'POST',
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(field),
                     success : function(data){
                         newsList(data);
                     }
-                })
-                layer.close(index);
-            }else{
-                layer.msg("请输入需要查询的内容");
+                });
             }
+            return false;
         });
 
     })

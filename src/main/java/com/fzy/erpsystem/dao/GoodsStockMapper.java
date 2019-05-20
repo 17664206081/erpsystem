@@ -3,6 +3,7 @@ package com.fzy.erpsystem.dao;
 import com.fzy.erpsystem.entity.GoodsStock;
 import org.apache.ibatis.annotations.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -63,5 +64,16 @@ public interface GoodsStockMapper {
             +"and buse_date is not null"
             + "</script>")
     List<GoodsStock> report(@Param("type") String type, @Param("storeId") Long storeId);
+
+
+    @Select("<script>"
+            +"select sum(goods_amt * goods_price) as price from t_goods_stock where store_id=#{storeId} and kc='CK'"
+            +"<if test= 'goodsId!=null' >"
+            + "and goods_id=#{goodsId}"
+            + "</if>"
+            +"and date_format(buse_date,'%Y-%m-%d')=#{buseDate}"
+            + "</script>")
+    BigDecimal findBusedDay(@Param("buseDate") String buseDate, @Param("storeId") Long storeId,@Param("goodsId") Long goodsId);
+
 
 }
