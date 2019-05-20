@@ -98,7 +98,7 @@
                             +'<td>'+currData[i].supplierName+'</td>'
                             +'<td>'+currData[i].goodsAmt+'</td>'
                             +'<td>'+currData[i].goodsPrice+'</td>'
-                            +'<td>'+(currData[i].goodsPrice*+currData[i].goodsAmt)+'</td>'
+                            +'<td>'+accMul(currData[i].goodsAmt,currData[i].goodsPrice)+'</td>'
                             +'<td>'+currData[i].buseDate+'</td>'
                             +'</tr>'
                     }
@@ -122,6 +122,13 @@
                     form.render();
                 }
             })
+        }
+
+        function accMul(num1,num2){
+            var m=0,s1=num1.toString(),s2=num2.toString();
+            try{m+=s1.split(".")[1].length}catch(e){};
+            try{m+=s2.split(".")[1].length}catch(e){};
+            return Number(s1.replace(".",""))*Number(s2.replace(".",""))/Math.pow(10,m);
         }
 
         //查询

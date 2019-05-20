@@ -59,11 +59,6 @@
         });
 
 
-        //操作
-        $("body").on("click",".news_edit",function(){  //编辑
-
-        })
-
         //查询
         $(".search_btn").click(function(){
             if($(".search_input").val() != ''){
@@ -106,7 +101,6 @@
         });
 
 
-        //添加文章
         //改变窗口大小时，重置弹窗的高度，防止超出可视区域（如F12调出debug的操作）
         $(window).one("resize",function(){
             $(".newsAdd_btn").click(function(){
