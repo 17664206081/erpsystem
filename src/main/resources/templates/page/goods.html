@@ -39,6 +39,7 @@
             <th style="text-align:left;">单价</th>
             <th style="text-align:left;">供应商</th>
             <th style="text-align:left;">安全库存</th>
+            <th style="text-align:center; width: 60px">操作</th>
         </tr>
         </thead>
         <tbody class="news_content"></tbody>
@@ -71,6 +72,19 @@
             layer.close(index);
         });
 
+        $("body").on("click",".news_del",function(){  //删除
+            var _this = $(this);
+            layer.confirm('确定删除此信息？',{icon:3, title:'提示信息'},function(index){
+                $.ajax({
+                    url:'/goods/'+_this.attr("data-id"),
+                    type: 'DELETE',
+                    success: function (data) {
+                        location.reload();
+                    }
+                });
+                layer.close(index);
+            });
+        });
 
         //添加文章
         //改变窗口大小时，重置弹窗的高度，防止超出可视区域（如F12调出debug的操作）
@@ -109,6 +123,9 @@
                             +'<td>'+currData[i].price+'</td>'
                             +'<td>'+currData[i].supplierName+'</td>'
                             +'<td>'+currData[i].stock+'</td>'
+                            +'<td>'
+                            + '<a class="layui-btn layui-btn-danger layui-btn-mini news_del" data-id="'+data[i].id+'"><i class="layui-icon">&#xe640;</i> 删除</a>'
+                            +'</td>'
                             +'</tr>';
                     }
                 }else{
