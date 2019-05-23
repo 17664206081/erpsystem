@@ -2,9 +2,8 @@ package com.fzy.erpsystem.controller;
 
 import com.fzy.erpsystem.dao.GoodsStockMapper;
 import com.fzy.erpsystem.entity.GoodsStock;
+import com.fzy.erpsystem.entity.GoodsStockDto;
 import com.fzy.erpsystem.entity.Kc;
-import com.fzy.erpsystem.entity.User;
-import jdk.nashorn.internal.runtime.logging.Logger;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,13 +24,13 @@ public class ReportController {
     private GoodsStockMapper goodsStockMapper;
 
     @GetMapping("/cg")
-    public List<GoodsStock> findAllCg(@RequestParam("storeId") Long storeId){
-        return goodsStockMapper.report(Kc.RK + "", storeId);
+    public List<GoodsStockDto> findAllCg(@RequestParam("storeId") Long storeId){
+        return goodsStockMapper.reportDto(Kc.RK + "");
     }
 
     @GetMapping("/xs")
-    public List<GoodsStock> findAllXS(@RequestParam("storeId") Long storeId){
-        return goodsStockMapper.report(Kc.CK+"",storeId);
+    public List<GoodsStockDto> findAllXS(@RequestParam("storeId") Long storeId){
+        return goodsStockMapper.reportDto(Kc.CK+"");
     }
 
     @GetMapping("/kc")

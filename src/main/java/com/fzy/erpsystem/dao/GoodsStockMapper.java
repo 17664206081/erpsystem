@@ -1,7 +1,9 @@
 package com.fzy.erpsystem.dao;
 
 import com.fzy.erpsystem.entity.GoodsStock;
+import com.fzy.erpsystem.entity.GoodsStockDto;
 import org.apache.ibatis.annotations.*;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -65,6 +67,9 @@ public interface GoodsStockMapper {
             + "</script>")
     List<GoodsStock> report(@Param("type") String type, @Param("storeId") Long storeId);
 
+
+    @Select("select DATE_FORMAT(buse_date,'%Y-%m-%d') as buse_date, sum(goods_amt*goods_price) as total from t_goods_stock where kc=#{type} and buse_date is not null group by DATE_FORMAT(buse_date,'%Y-%m-%d')")
+    List<GoodsStockDto> reportDto(@Param("type") String type);
 
     @Select("<script>"
             +"select sum(goods_amt * goods_price) as price from t_goods_stock where store_id=#{storeId} and kc='CK'"
