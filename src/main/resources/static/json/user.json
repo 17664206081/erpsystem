@@ -1,10 +1,10 @@
 [{
-  "title" : "请购",
+  "title" : "门店请购管理",
   "icon" : "&#xe636;",
   "href" : "page/in.html",
   "spread" : false
 },{
-  "title" : "销售",
+  "title" : "销售管理",
   "icon" : "&#xe64c;",
   "href" : "page/out.html",
   "spread" : false
