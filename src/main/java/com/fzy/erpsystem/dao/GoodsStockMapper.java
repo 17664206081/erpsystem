@@ -4,6 +4,7 @@ import com.fzy.erpsystem.entity.GoodsStock;
 import org.apache.ibatis.annotations.*;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.List;
 
 /**
@@ -15,8 +16,8 @@ import java.util.List;
 @Mapper
 public interface GoodsStockMapper {
 
-    @Insert("insert into t_goods_stock(goods_id,goods_name,supplier_id, supplier_name,store_id,store_name,goods_amt,goods_price,Kc)" +
-            " values(#{goodsId},#{goodsName},#{supplierId},#{supplierName},#{storeId},#{storeName},#{goodsAmt},#{goodsPrice},#{kc})")
+    @Insert("insert into t_goods_stock(goods_id,goods_name,supplier_id, supplier_name,store_id,store_name,home_id,ck_name,goods_amt,goods_price,Kc,buse_date)" +
+            " values(#{goodsId},#{goodsName},#{supplierId},#{supplierName},#{storeId},#{storeName},#{homeId},#{ckName},#{goodsAmt},#{goodsPrice},#{kc},#{buseDate})")
     int kc(GoodsStock goodsStock);
 
 
@@ -30,7 +31,7 @@ public interface GoodsStockMapper {
     //@Select("select sum(goods_amt) as goods_amt, Kc ,goods_name, supplier_name from t_goods_stock group by goods_name,Kc,supplier_name")
 
     @Select("<script>"
-    +"select sum(goods_amt) as goods_amt, kc,goods_id,goods_name,store_id,store_name from t_goods_stock"
+    +"select sum(goods_amt) as goods_amt, kc,goods_id,goods_name,store_id,store_name,ck_name from t_goods_stock"
     +"<if test= 'goodsName!=null' >"
     + "where goods_name=#{goodsName}"
     + "</if>"
@@ -54,8 +55,6 @@ public interface GoodsStockMapper {
     @Update("update t_goods_stock set buse_date= now() where id=#{id}")
     int yasuo(Long id);
 
-
-
     @Select("<script>"
             +"select * from t_goods_stock where kc=#{type}"
             +"<if test= 'storeId!=null' >"
@@ -65,6 +64,27 @@ public interface GoodsStockMapper {
             + "</script>")
     List<GoodsStock> report(@Param("type") String type, @Param("storeId") Long storeId);
 
+    @Select("<script>"
+            +"select * from t_goods_stock where kc=#{type}"
+            +"<if test= 'storeId!=null' >"
+            + "and store_id=#{storeId}"
+            + "and home_id like #{homeId}"
+            + "and goods_id like #{goodId}"
+            + "</if>"
+            +"and buse_date is not null"
+            + "</script>")
+    List<GoodsStock> tablereport(@Param("type") String type, @Param("storeId") Long storeId,@Param("homeId") String homeId,@Param("goodId") String goodId);
+
+    @Select("<script>"
+            +"select * from t_goods_stock where kc=#{type} "
+            +"<if test= 'storeId!=null' >"
+            + "and store_id=#{storeId} "
+            + "and home_id=#{homeId} "
+            + "and goods_id like #{goodId} "
+            + "</if>"
+            + "and buse_date is not null"
+            + "</script>")
+    List<GoodsStock> reportgd(@Param("type") String type,@Param("storeId") Long storeId,@Param("homeId") Long homeId,@Param("goodId") String goodId);
 
     @Select("<script>"
             +"select sum(goods_amt * goods_price) as price from t_goods_stock where store_id=#{storeId} and kc='CK'"

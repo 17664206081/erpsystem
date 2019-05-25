@@ -33,37 +33,37 @@
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button class="layui-btn"  lay-submit=""  lay-filter="addNews">立即提交</button>
+            <button class="layui-btn" lay-submit="" lay-filter="addNews">立即提交</button>
             <button type="reset" class="layui-btn layui-btn-primary">重置</button>
         </div>
     </div>
 </form>
 <script type="text/javascript" th:src="@{/layui/layui.js}"></script>
 <script type="text/javascript">
-    layui.use(['form','layer','jquery'], function () {
+    layui.use(['form', 'layer', 'jquery'], function () {
         var form = layui.form(),
             layer = parent.layer === undefined ? layui.layer : parent.layer,
             $ = layui.jquery;
-            //添加
-            form.on("submit(addNews)",function(data){
-                $.ajax({
-                    url:'/supplier',
-                    type: 'POST',
-                    contentType: "application/json; charset=utf-8",
-                    data: JSON.stringify(data.field),
-                    success: function (data) {
-                        if(data.code==="200"){
-                            var index = top.layer.msg('数据提交中，请稍候',{icon: 16,time:false,shade:0.8});
-                            top.layer.close(index);
-                            top.layer.msg("供应商添加成功！");
-                            layer.closeAll("iframe");
-                            //刷新父页面
-                            parent.location.reload();
-                        }
+        //添加
+        form.on("submit(addNews)", function (data) {
+            $.ajax({
+                url: '/supplier',
+                type: 'POST',
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(data.field),
+                success: function (data) {
+                    if (data.code === "200") {
+                        var index = top.layer.msg('数据提交中，请稍候', {icon: 16, time: false, shade: 0.8});
+                        top.layer.close(index);
+                        top.layer.msg("供应商添加成功！");
+                        layer.closeAll("iframe");
+                        //刷新父页面
+                        parent.location.reload();
                     }
-                });
-                return false;
-            })
+                }
+            });
+            return false;
+        })
     })
 </script>
 </body>

@@ -10,14 +10,14 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
-    <link rel="stylesheet" href="//at.alicdn.com/t/font_tnyc012u2rlwstt9.css" media="all" />
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_tnyc012u2rlwstt9.css" media="all"/>
     <link th:href="@{/layui/css/layui.css}" rel="stylesheet">
     <link th:href="@{/css/main.css}" rel="stylesheet">
     <link th:href="@{/images/favicon.ico}" rel="shortcut icon">
     <script>
-        var user=window.sessionStorage.getItem("user");
-        if(user === null){
-            window.location.href="/login.html";
+        var user = window.sessionStorage.getItem("user");
+        if (user === null) {
+            window.location.href = "/login.html";
         }
     </script>
 </head>
@@ -26,7 +26,7 @@
     <!-- 顶部 -->
     <div class="layui-header header">
         <div class="layui-main">
-            <a href="#" class="logo" style="font-size:18px" >采购库存管理系统</a>
+            <a href="#" class="logo" style="font-size:18px">采购库存管理系统</a>
             <!-- 显示/隐藏菜单 -->
             <a href="javascript:;" class="iconfont hideMenu icon-menu1"></a>
             <!-- 顶部右侧菜单 -->
@@ -37,7 +37,7 @@
                         <cite class="UserName"></cite>
                     </a>
                     <dl class="layui-nav-child">
-                        <dd><a class="signOut" ><cite>退出</cite></a></dd>
+                        <dd><a class="signOut"><cite>退出</cite></a></dd>
                     </dl>
                 </li>
             </ul>
@@ -58,9 +58,12 @@
                 <li class="layui-nav-item">
                     <a href="javascript:;"><i class="iconfont icon-caozuo"></i> 页面操作</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:;" class="refresh refreshThis"><i class="layui-icon">&#x1002;</i> 刷新当前</a></dd>
-                        <dd><a href="javascript:;" class="closePageOther"><i class="iconfont icon-prohibit"></i> 关闭其他</a></dd>
-                        <dd><a href="javascript:;" class="closePageAll"><i class="iconfont icon-guanbi"></i> 关闭全部</a></dd>
+                        <dd><a href="javascript:;" class="refresh refreshThis"><i class="layui-icon">&#x1002;</i>
+                            刷新当前</a></dd>
+                        <dd><a href="javascript:;" class="closePageOther"><i class="iconfont icon-prohibit"></i>
+                            关闭其他</a></dd>
+                        <dd><a href="javascript:;" class="closePageAll"><i class="iconfont icon-guanbi"></i> 关闭全部</a>
+                        </dd>
                     </dl>
                 </li>
             </ul>

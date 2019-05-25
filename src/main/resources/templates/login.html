@@ -7,52 +7,52 @@
     <link th:href="@{/css/login.css}" rel="stylesheet">
 </head>
 <body class="login-bg">
-    <div class="login">
-        <div class="message">供应链管理系统</div>
-        <from class="layui-form">
-            <div class="layui-form-item">
-                <label class="layui-form-label">用户名</label>
-                <div class="layui-input-block">
-                    <input type="text" name="userName" required  lay-verify="required"
-                           placeholder="请输入用户名" autocomplete="off" class="layui-input">
-                </div>
+<div class="login">
+    <div class="message">采购库存管理系统</div>
+    <from class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户名</label>
+            <div class="layui-input-block">
+                <input type="text" name="userName" required lay-verify="required"
+                       placeholder="请输入用户名" autocomplete="off" class="layui-input">
             </div>
+        </div>
 
-            <div class="layui-form-item">
-                <label class="layui-form-label">密&#12288;码</label>
-                <div class="layui-input-block">
-                    <input type="password" name="password" required lay-verify="required"
-                           placeholder="请输入密码" autocomplete="off" class="layui-input">
-                </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">密&#12288;码</label>
+            <div class="layui-input-block">
+                <input type="password" name="password" required lay-verify="required"
+                       placeholder="请输入密码" autocomplete="off" class="layui-input">
             </div>
+        </div>
 
-            <div class="layui-form-item">
-                <button class="layui-btn layui-block" lay-submit="" lay-filter="login">登录</button>
-            </div>
+        <div class="layui-form-item">
+            <button class="layui-btn layui-block" lay-submit="" lay-filter="login">登录</button>
+        </div>
 
-        </from>
-    </div>
+    </from>
+</div>
 </body>
 <script th:src="@{/layui/layui.js}"></script>
 <script>
     layui.use(['layer', 'form'], function () {
         var form = layui.form(), layer = layui.layer,
-        $ = layui.jquery;
+            $ = layui.jquery;
 
         //登录按钮
-        form.on("submit(login)",function(data){
-            var button=$(this).text("登录中...").attr("disabled","disabled").addClass("layui-disabled");
-            var username=data.field.userName;
+        form.on("submit(login)", function (data) {
+            var button = $(this).text("登录中...").attr("disabled", "disabled").addClass("layui-disabled");
+            var username = data.field.userName;
             $.ajax({
-                url:'/doLogin',
+                url: '/doLogin',
                 type: 'POST',
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify(data.field),
                 success: function (data) {
-                    if(data.code==="200"){
-                        sessionStorage.setItem("user",username);
+                    if (data.code === "200") {
+                        sessionStorage.setItem("user", username);
                         window.location.href = "/index.html";
-                    }else {
+                    } else {
                         layer.msg('用户名或密码错误');
                         button.removeClass("layui-disabled").text("登录");
                     }

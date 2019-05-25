@@ -22,12 +22,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addViewController("/page/out.html").setViewName("/page/out");
         registry.addViewController("/page/stock.html").setViewName("/page/stock");
         registry.addViewController("/page/supplier.html").setViewName("/page/supplier");
+        registry.addViewController("/page/storehouse.html").setViewName("/page/storehouse");
         registry.addViewController("/page/addSupplier.html").setViewName("/page/addSupplier");
         registry.addViewController("/page/addin.html").setViewName("/page/addin");
         registry.addViewController("/page/addout.html").setViewName("/page/addout");
         registry.addViewController("/page/estimate.html").setViewName("/page/estimate");
         registry.addViewController("/page/store.html").setViewName("/page/store");
         registry.addViewController("/page/addStore.html").setViewName("/page/addStore");
+        registry.addViewController("/page/addHome.html").setViewName("/page/addHome");
 
         registry.addViewController("/page/goods.html").setViewName("/page/goods");
         registry.addViewController("/page/addgoods.html").setViewName("/page/addgoods");
@@ -36,7 +38,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addViewController("/page/ckmanage.html").setViewName("/page/ckmanage");
 
 
+        registry.addViewController("/page/xstable.html").setViewName("/page/xstable");
         registry.addViewController("/page/xsreport.html").setViewName("/page/xsreport");
+        registry.addViewController("/page/cgtable.html").setViewName("/page/cgtable");
         registry.addViewController("/page/cgreport.html").setViewName("/page/cgreport");
         registry.addViewController("/page/kcreport.html").setViewName("/page/kcreport");
 

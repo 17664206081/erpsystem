@@ -1,9 +1,6 @@
 package com.fzy.erpsystem.controller;
 
-import com.fzy.erpsystem.dao.GoodsMapper;
-import com.fzy.erpsystem.dao.GoodsStockMapper;
-import com.fzy.erpsystem.dao.StoreMapper;
-import com.fzy.erpsystem.dao.SupplierMapper;
+import com.fzy.erpsystem.dao.*;
 import com.fzy.erpsystem.entity.*;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +30,9 @@ public class GoodsStockController {
     private StoreMapper storeMapper;
 
     @Resource
+    private StoreHomeMapper storeHomeMapper;
+
+    @Resource
     private SupplierMapper supplierMapper;
 
     @PostMapping("/addin")
@@ -48,6 +48,7 @@ public class GoodsStockController {
 
         Goods goods = goodsMapper.findone(goodsStock.getGoodsId());
         goodsStock.setGoodsName(goods.getGoodsName());
+        goodsStock.setCkName(goods.getCkName());
 
         goodsStockMapper.kc(goodsStock);
         map.put("code","200");
@@ -83,6 +84,7 @@ public class GoodsStockController {
 
         Goods goods = goodsMapper.findone(goodsStock.getGoodsId());
         goodsStock.setGoodsName(goods.getGoodsName());
+        goodsStock.setCkName(goods.getCkName());
 
         goodsStockMapper.kc(goodsStock);
         map.put("code","200");

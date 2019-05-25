@@ -16,7 +16,7 @@
 
     <form class="layui-form">
         <div class="layui-inline">
-            <label class="layui-form-label" >门店名称</label>
+            <label class="layui-form-label">门店名称</label>
             <div class="layui-input-inline">
                 <select name="storeId" id="storeId" lay-search>
                     <option value="">请选择门店</option>
@@ -43,7 +43,8 @@
         </colgroup>
         <thead>
         <tr>
-            <th style="text-align: center"><input type="checkbox" name="" lay-skin="primary" lay-filter="allChoose" id="allChoose"></th>
+            <th style="text-align: center"><input type="checkbox" name="" lay-skin="primary" lay-filter="allChoose"
+                                                  id="allChoose"></th>
             <th>门店名称</th>
             <th>物品名称</th>
             <th>供应商名称</th>
@@ -58,49 +59,49 @@
 <div id="page"></div>
 <script th:src="@{/layui/layui.js}"></script>
 <script>
-    layui.use(['form','layer','jquery','laypage'], function() {
+    layui.use(['form', 'layer', 'jquery', 'laypage'], function () {
         var form = layui.form(),
             laypage = layui.laypage,
             layer = parent.layer === undefined ? layui.layer : parent.layer,
             $ = layui.jquery;
 
-        $.get("/store", function(data){
+        $.get("/store", function (data) {
             $.each(data, function (index) {
                 var id = data[index].id;
                 var value = data[index].name;
                 //构造动态option
-                $('#storeId').append("<option value='"+id+"'>"+value+"</option>")
+                $('#storeId').append("<option value='" + id + "'>" + value + "</option>")
             });
             form.render('select');
         });
 
         //加载数据
-        $.get("/report//kc?storeId=", function(data){
+        $.get("/report//kc?storeId=", function (data) {
             newsList(data);
         });
 
-        function newsList(that){
+        function newsList(that) {
             //渲染数据
-            function renderDate(data,curr){
+            function renderDate(data, curr) {
                 var dataHtml = '';
-                if(!that){
-                    currData = newsData.concat().splice(curr*nums-nums, nums);
-                }else{
-                    currData = that.concat().splice(curr*nums-nums, nums);
+                if (!that) {
+                    currData = newsData.concat().splice(curr * nums - nums, nums);
+                } else {
+                    currData = that.concat().splice(curr * nums - nums, nums);
                 }
-                if(currData.length != 0){
-                    for(var i=0;i<currData.length;i++){
+                if (currData.length != 0) {
+                    for (var i = 0; i < currData.length; i++) {
                         dataHtml += '<tr>'
-                            +'<td align="center"><input type="checkbox" name="checked" lay-skin="primary" lay-filter="choose"></td>'
-                            +'<td>'+currData[i].storeName+'</td>'
-                            +'<td>'+currData[i].goodsName+'</td>'
-                            +'<td>'+currData[i].supplierName+'</td>'
-                            +'<td>'+currData[i].goodsAmt+'</td>'
-                            +'<td>'+currData[i].goodsPrice+'</td>'
-                            +'<td>'+accMul(currData[i].goodsAmt,currData[i].goodsPrice)+'</td>'
-                            +'</tr>'
+                            + '<td align="center"><input type="checkbox" name="checked" lay-skin="primary" lay-filter="choose"></td>'
+                            + '<td>' + currData[i].storeName + '</td>'
+                            + '<td>' + currData[i].goodsName + '</td>'
+                            + '<td>' + currData[i].supplierName + '</td>'
+                            + '<td>' + currData[i].goodsAmt + '</td>'
+                            + '<td>' + currData[i].goodsPrice + '</td>'
+                            + '<td>' + accMul(currData[i].goodsAmt, currData[i].goodsPrice) + '</td>'
+                            + '</tr>'
                     }
-                }else{
+                } else {
                     dataHtml = '<tr><td colspan="8">暂无数据</td></tr>';
                 }
                 return dataHtml;
@@ -108,34 +109,42 @@
 
             //分页
             var nums = 10; //每页出现的数据量
-            if(that){
+            if (that) {
                 newsData = that;
             }
             laypage({
-                cont : "page",
-                pages : Math.ceil(newsData.length/nums),
-                jump : function(obj){
-                    $(".news_content").html(renderDate(newsData,obj.curr));
-                    $('.news_list thead input[type="checkbox"]').prop("checked",false);
+                cont: "page",
+                pages: Math.ceil(newsData.length / nums),
+                jump: function (obj) {
+                    $(".news_content").html(renderDate(newsData, obj.curr));
+                    $('.news_list thead input[type="checkbox"]').prop("checked", false);
                     form.render();
                 }
             })
         }
 
-        function accMul(num1,num2){
-            var m=0,s1=num1.toString(),s2=num2.toString();
-            try{m+=s1.split(".")[1].length}catch(e){};
-            try{m+=s2.split(".")[1].length}catch(e){};
-            return Number(s1.replace(".",""))*Number(s2.replace(".",""))/Math.pow(10,m);
+        function accMul(num1, num2) {
+            var m = 0, s1 = num1.toString(), s2 = num2.toString();
+            try {
+                m += s1.split(".")[1].length
+            } catch (e) {
+            }
+            ;
+            try {
+                m += s2.split(".")[1].length
+            } catch (e) {
+            }
+            ;
+            return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / Math.pow(10, m);
         }
 
         //查询
-        $(".search_btn").click(function(){
-            var index = layer.msg('查询中，请稍候',{icon: 16,time:false,shade:0.8});
+        $(".search_btn").click(function () {
+            var index = layer.msg('查询中，请稍候', {icon: 16, time: false, shade: 0.8});
             $.ajax({
-                url : "/report/kc?storeId="+ $('#storeId option:selected').val(),
-                type : "get",
-                success : function(data){
+                url: "/report/kc?storeId=" + $('#storeId option:selected').val(),
+                type: "get",
+                success: function (data) {
                     newsList(data);
                 }
             })

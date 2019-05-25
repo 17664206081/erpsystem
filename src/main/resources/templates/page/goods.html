@@ -26,7 +26,7 @@
 <div class="layui-form news_list">
     <table class="layui-table">
         <colgroup>
-            <col >
+            <col>
             <col>
             <col>
             <col>
@@ -39,6 +39,7 @@
             <th style="text-align:left;">单价</th>
             <th style="text-align:left;">供应商</th>
             <th style="text-align:left;">安全库存</th>
+            <th style="text-align:left;">仓库名称</th>
             <th style="text-align:center; width: 60px">操作</th>
         </tr>
         </thead>
@@ -48,35 +49,35 @@
 <div id="page"></div>
 <script type="text/javascript" th:src="@{/layui/layui.js}"></script>
 <script type="text/javascript">
-    layui.use(['form','layer','jquery','laypage'], function () {
+    layui.use(['form', 'layer', 'jquery', 'laypage'], function () {
         var form = layui.form(),
             layer = parent.layer === undefined ? layui.layer : parent.layer,
             laypage = layui.laypage,
             $ = layui.jquery;
 
         //加载数据
-        $.get("/goods", function(data){
+        $.get("/goods", function (data) {
             newsList(data);
         });
 
         //查询
-        $(".search_btn").click(function(){
-            var index = layer.msg('查询中，请稍候',{icon: 16,time:false,shade:0.8});
+        $(".search_btn").click(function () {
+            var index = layer.msg('查询中，请稍候', {icon: 16, time: false, shade: 0.8});
             $.ajax({
-                url : "/goods/search?keyword="+$(".search_input").val(),
-                type : "get",
-                success : function(data){
+                url: "/goods/search?keyword=" + $(".search_input").val(),
+                type: "get",
+                success: function (data) {
                     newsList(data);
                 }
             })
             layer.close(index);
         });
 
-        $("body").on("click",".news_del",function(){  //删除
+        $("body").on("click", ".news_del", function () {  //删除
             var _this = $(this);
-            layer.confirm('确定删除此信息？',{icon:3, title:'提示信息'},function(index){
+            layer.confirm('确定删除此信息？', {icon: 3, title: '提示信息'}, function (index) {
                 $.ajax({
-                    url:'/goods/'+_this.attr("data-id"),
+                    url: '/goods/' + _this.attr("data-id"),
                     type: 'DELETE',
                     success: function (data) {
                         location.reload();
@@ -88,47 +89,48 @@
 
         //添加文章
         //改变窗口大小时，重置弹窗的高度，防止超出可视区域（如F12调出debug的操作）
-        $(window).one("resize",function(){
-            $(".newsAdd_btn").click(function(){
+        $(window).one("resize", function () {
+            $(".newsAdd_btn").click(function () {
                 var index = layui.layer.open({
-                    title : "添加物品",
-                    type : 2,
-                    content : "addgoods.html",
-                    success : function(layero, index){
-                        setTimeout(function(){
+                    title: "添加物品",
+                    type: 2,
+                    content: "addgoods.html",
+                    success: function (layero, index) {
+                        setTimeout(function () {
                             layui.layer.tips('点击此处返回', '.layui-layer-setwin .layui-layer-close', {
                                 tips: 3
                             });
-                        },500)
+                        }, 500)
                     }
                 })
                 layui.layer.full(index);
             })
         }).resize();
 
-        function newsList(that){
+        function newsList(that) {
             //渲染数据
-            function renderDate(data,curr){
+            function renderDate(data, curr) {
                 var dataHtml = '';
-                if(!that){
-                    currData = newsData.concat().splice(curr*nums-nums, nums);
-                }else{
-                    currData = that.concat().splice(curr*nums-nums, nums);
+                if (!that) {
+                    currData = newsData.concat().splice(curr * nums - nums, nums);
+                } else {
+                    currData = that.concat().splice(curr * nums - nums, nums);
                 }
-                if(currData.length != 0){
-                    for(var i=0;i<currData.length;i++){
+                if (currData.length != 0) {
+                    for (var i = 0; i < currData.length; i++) {
                         dataHtml += '<tr>'
-                            +'<td>'+currData[i].billNo+'</td>'
-                            +'<td>'+currData[i].goodsName+'</td>'
-                            +'<td>'+currData[i].price+'</td>'
-                            +'<td>'+currData[i].supplierName+'</td>'
-                            +'<td>'+currData[i].stock+'</td>'
-                            +'<td>'
-                            + '<a class="layui-btn layui-btn-danger layui-btn-mini news_del" data-id="'+data[i].id+'"><i class="layui-icon">&#xe640;</i> 删除</a>'
-                            +'</td>'
-                            +'</tr>';
+                            + '<td>' + currData[i].billNo + '</td>'
+                            + '<td>' + currData[i].goodsName + '</td>'
+                            + '<td>' + currData[i].price + '</td>'
+                            + '<td>' + currData[i].supplierName + '</td>'
+                            + '<td>' + currData[i].stock + '</td>'
+                            + '<td>' + currData[i].ckName + '</td>'
+                            + '<td>'
+                            + '<a class="layui-btn layui-btn-danger layui-btn-mini news_del" data-id="' + data[i].id + '"><i class="layui-icon">&#xe640;</i> 删除</a>'
+                            + '</td>'
+                            + '</tr>';
                     }
-                }else{
+                } else {
                     dataHtml = '<tr><td colspan="8">暂无数据</td></tr>';
                 }
                 return dataHtml;
@@ -136,15 +138,15 @@
 
             //分页
             var nums = 10; //每页出现的数据量
-            if(that){
+            if (that) {
                 newsData = that;
             }
             laypage({
-                cont : "page",
-                pages : Math.ceil(newsData.length/nums),
-                jump : function(obj){
-                    $(".news_content").html(renderDate(newsData,obj.curr));
-                    $('.news_list thead input[type="checkbox"]').prop("checked",false);
+                cont: "page",
+                pages: Math.ceil(newsData.length / nums),
+                jump: function (obj) {
+                    $(".news_content").html(renderDate(newsData, obj.curr));
+                    $('.news_list thead input[type="checkbox"]').prop("checked", false);
                     form.render();
                 }
             })

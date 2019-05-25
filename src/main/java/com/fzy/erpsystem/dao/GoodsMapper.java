@@ -15,8 +15,8 @@ import java.util.List;
 @Mapper
 public interface GoodsMapper {
 
-    @Insert("insert INTO t_goods(bill_no, goods_name,supplier_id,supplier_name,price,stock) " +
-            "values(#{billNo},#{goodsName},#{supplierId},#{supplierName},#{price},#{stock})")
+    @Insert("insert INTO t_goods(bill_no, goods_name,supplier_id,supplier_name,price,stock,home_id,ck_name) " +
+            "values(#{billNo},#{goodsName},#{supplierId},#{supplierName},#{price},#{stock},#{homeId},#{ckName})")
     @Options(useGeneratedKeys = true,keyProperty = "id")
     int save(Goods goods);
 
@@ -34,6 +34,9 @@ public interface GoodsMapper {
 
     @Select("select * from t_goods where supplier_id=#{supplierId}")
     List<Goods> findBySupplier(Long supplierId);
+
+    @Select("select * from t_goods where home_id=#{homeId} and supplier_id like #{supplierId}")
+    List<Goods> findByhome(@Param("homeId") Long homeId,@Param("supplierId") String supplierId);
 
     @Select("select * from t_goods where id=#{goodsId}")
     Goods findone(Long goodsId);

@@ -1,76 +1,100 @@
-[{
-	"title" : "门店管理",
-	"icon" : "&#xe64d;",
-	"href" : "page/store.html",
-	"spread" : false
-},{
-	"title" : "物品管理",
-	"icon" : "&#xe64d;",
-	"href" : "page/goods.html",
-	"spread" : false
-},{
-	"title" : "供应商管理",
-	"icon" : "&#xe62e;",
-	"href" : "page/supplier.html",
-	"spread" : false
-},{
-	"title" : "门店请购管理",
-	"icon" : "&#xe636;",
-	"href" : "page/in.html",
-	"spread" : false
-},
-{
-	"title" : "库存管理",
-	"icon" : "&#xe636;",
-	"href" : "",
-	"spread" : false,
-	"children" : [
-		{
-			"title" : "入库管理",
-			"href" : "page/rkmanage.html",
-			"spread" : false
-		},
-		{
-			"title" : "出库管理",
-			"href" : "page/ckmanage.html",
-			"spread" : false
-		},
-		{
-			"title" : "库存预警",
-			"href" : "page/stock.html",
-			"spread" : false
-		}
-	]
-},{
-	"title" : "销售管理",
-	"icon" : "&#xe64c;",
-	"href" : "page/out.html",
-	"spread" : false
-},{
-	"title" : "预估管理",
-	"icon" : "&#xe631;",
-	"href" : "page/estimate.html",
-	"spread" : false
-},{
-	"title" : "报表管理",
-	"icon" : "icon-lingsheng",
-	"href" : "",
-	"spread" : false,
-	"children" : [
-		{
-			"title" : "采购报表",
-			"href" : "page/cgreport.html",
-			"spread" : false
-		},
-		{
-			"title" : "库存余量表",
-			"href" : "page/kcreport.html",
-			"spread" : false
-		},
-		{
-			"title" : "销售报表",
-			"href" : "page/xsreport.html",
-			"spread" : false
-		}
-	]
-}]
+[
+  {
+    "title": "门店管理",
+    "icon": "&#xe64d;",
+    "href": "page/store.html",
+    "spread": false
+  },
+  {
+    "title": "仓库管理",
+    "icon": "&#xe62e;",
+    "href": "page/storehouse.html",
+    "spread": false
+  },
+  {
+    "title": "物品管理",
+    "icon": "&#xe64d;",
+    "href": "page/goods.html",
+    "spread": false
+  },
+  {
+    "title": "供应商管理",
+    "icon": "&#xe62e;",
+    "href": "page/supplier.html",
+    "spread": false
+  },
+  {
+    "title": "门店请购管理",
+    "icon": "&#xe636;",
+    "href": "page/in.html",
+    "spread": false
+  },
+  {
+    "title": "库存管理",
+    "icon": "&#xe636;",
+    "href": "",
+    "spread": false,
+    "children": [
+      {
+        "title": "入库管理",
+        "href": "page/rkmanage.html",
+        "spread": false
+      },
+      {
+        "title": "出库管理",
+        "href": "page/ckmanage.html",
+        "spread": false
+      },
+      {
+        "title": "库存预警",
+        "href": "page/stock.html",
+        "spread": false
+      }
+    ]
+  },
+  {
+    "title": "销售管理",
+    "icon": "&#xe64c;",
+    "href": "page/out.html",
+    "spread": false
+  },
+  {
+    "title": "预估管理",
+    "icon": "&#xe631;",
+    "href": "page/estimate.html",
+    "spread": false
+  },
+  {
+    "title": "报表管理",
+    "icon": "icon-lingsheng",
+    "href": "",
+    "spread": false,
+    "children": [
+      {
+        "title": "采购报表",
+        "href": "page/cgtable.html",
+        "spread": false
+      },
+      {
+        "title": "采购统计表",
+        "href": "page/cgreport.html",
+        "spread": false
+      },
+      {
+        "title": "库存余量表",
+        "href": "page/kcreport.html",
+        "spread": false
+      },
+      {
+        "title": "销售报表",
+        "href": "page/xstable.html",
+        "spread": false
+      },
+      {
+        "title": "销售统计表",
+        "href": "page/xsreport.html",
+        "spread": false
+      }
+    ]
+  }
+]

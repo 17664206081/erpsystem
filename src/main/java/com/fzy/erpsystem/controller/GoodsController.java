@@ -1,8 +1,10 @@
 package com.fzy.erpsystem.controller;
 
 import com.fzy.erpsystem.dao.GoodsMapper;
+import com.fzy.erpsystem.dao.StoreHomeMapper;
 import com.fzy.erpsystem.dao.SupplierMapper;
 import com.fzy.erpsystem.entity.Goods;
+import com.fzy.erpsystem.entity.StoreHome;
 import com.fzy.erpsystem.entity.Supplier;
 import org.apache.catalina.Store;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +30,8 @@ public class GoodsController {
     private GoodsMapper goodsMapper;
 
     @Resource
+    private StoreHomeMapper storeHomeMapper;
+    @Resource
     private SupplierMapper supplierMapper;
 
     @PostMapping
@@ -42,6 +46,8 @@ public class GoodsController {
 
         Supplier mapperOne = supplierMapper.findOne(goods.getSupplierId());
         goods.setSupplierName(mapperOne.getName());
+        StoreHome storeHomeOne = storeHomeMapper.findOne(goods.getHomeId());
+        goods.setCkName(storeHomeOne.getCkName());
         goodsMapper.save(goods);
         map.put("code","200");
 
@@ -64,7 +70,15 @@ public class GoodsController {
 
     @GetMapping("/{id}")
     public List<Goods> findBySupplier(@PathVariable("id") Long id){
-       return goodsMapper.findBySupplier(id);
+        return goodsMapper.findBySupplier(id);
+    }
+
+    @GetMapping("/find")
+    public List<Goods> findByhome(@RequestParam("homeId") Long homeId,@RequestParam("supplierId") String supplierId){
+        if(supplierId.equals("0")){
+            supplierId = "%";
+        }
+        return goodsMapper.findByhome(homeId,supplierId);
     }
 
     @DeleteMapping("/{id}")

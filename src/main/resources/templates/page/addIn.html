@@ -14,7 +14,7 @@
 <body>
 <form class="layui-form">
     <div class="layui-form-item">
-        <label class="layui-form-label" >门店名称</label>
+        <label class="layui-form-label">门店名称</label>
         <div class="layui-input-inline" style="width: 500px">
             <select name="storeId" id="storeId">
                 <option value="">请选择门店</option>
@@ -25,8 +25,17 @@
     <div class="layui-form-item">
         <label class="layui-form-label">供应商名称</label>
         <div class="layui-input-inline" style="width: 500px">
-            <select  lay-filter="supplierId" name="supplierId" id="supplierId">
+            <select lay-filter="supplierId" name="supplierId" id="supplierId">
                 <option value="">请选择供应商</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">仓库名称</label>
+        <div class="layui-input-inline" style="width: 500px">
+            <select lay-filter="homeId" name="homeId" id="homeId">
+                <option value="">请选择仓库</option>
             </select>
         </div>
     </div>
@@ -56,44 +65,54 @@
 
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button class="layui-btn"  lay-submit=""  lay-filter="addNews">立即提交</button>
+            <button class="layui-btn" lay-submit="" lay-filter="addNews">立即提交</button>
             <button type="reset" class="layui-btn layui-btn-primary">重置</button>
         </div>
     </div>
 </form>
 <script type="text/javascript" th:src="@{/layui/layui.js}"></script>
 <script type="text/javascript">
-    layui.use(['form','layer','jquery'], function () {
+    layui.use(['form', 'layer', 'jquery'], function () {
         var form = layui.form(),
             layer = parent.layer === undefined ? layui.layer : parent.layer,
             $ = layui.jquery;
 
-        $.get("/supplier", function(data){
+        $.get("/supplier", function (data) {
             $.each(data, function (index) {
                 var id = data[index].id;
                 var value = data[index].name;
                 //构造动态option
-                $('#supplierId').append("<option value='"+id+"'>"+value+"</option>")
+                $('#supplierId').append("<option value='" + id + "'>" + value + "</option>")
             });
             form.render('select');
         });
 
-        $.get("/store", function(data){
+        $.get("/store", function (data) {
             $.each(data, function (index) {
                 var id = data[index].id;
                 var value = data[index].name;
                 //构造动态option
-                $('#storeId').append("<option value='"+id+"'>"+value+"</option>")
+                $('#storeId').append("<option value='" + id + "'>" + value + "</option>")
             });
             form.render('select');
         });
 
-        var goods=[];
+        $.get("/shome", function (data) {
+            $.each(data, function (index) {
+                var id = data[index].homeId;
+                var value = data[index].ckName;
+                //构造动态option
+                $('#homeId').append("<option value='" + id + "'>" + value + "</option>");
+            })
+            form.render('select');
+        });
+
+        var goods = [];
 
         //加载物品
-        form.on('select(supplierId)', function(data){
-            $.get("/goods/"+data.value, function(data){
-                goods=data;
+        form.on('select(homeId)', function (data) {
+            $.get("/goods/find?homeId=" + $('#homeId').find("option:selected").val()+"&supplierId="+$('#supplierId').find("option:selected").val(), function (data) {
+                goods = data;
                 //清空
                 $('#goodsId').empty("");
                 $('#goodsId').append("<option value=>请选择物品</option>")
@@ -101,15 +120,15 @@
                     var id = data[index].id;
                     var value = data[index].goodsName;
                     //构造动态option
-                    $('#goodsId').append("<option value='"+id+"'>"+value+"</option>")
+                    $('#goodsId').append("<option value='" + id + "'>" + value + "</option>")
                 })
                 form.render('select');
             });
         });
 
-        form.on('select(goodsId)', function(data){
-            for (var j=0; j<goods.length;j++){
-                if(parseInt(data.value)===goods[j].id){
+        form.on('select(goodsId)', function (data) {
+            for (var j = 0; j < goods.length; j++) {
+                if (parseInt(data.value) === goods[j].id) {
                     $('#goodsPrice').val(goods[j].price);
                     break;
                 }
@@ -118,18 +137,18 @@
         });
 
         //添加
-        form.on("submit(addNews)",function (data) {
-            if(data.field.supplierName==""){
+        form.on("submit(addNews)", function (data) {
+            if (data.field.supplierName == "") {
                 layer.msg("供应商不能为空");
-            }else{
+            } else {
                 $.ajax({
-                    url:'/stock/addin',
+                    url: '/stock/addin',
                     type: 'POST',
                     contentType: "application/json; charset=utf-8",
                     data: JSON.stringify(data.field),
                     success: function (data) {
-                        if(data.code==="200"){
-                            var index = top.layer.msg('数据提交中，请稍候',{icon: 16,time:false,shade:0.8});
+                        if (data.code === "200") {
+                            var index = top.layer.msg('数据提交中，请稍候', {icon: 16, time: false, shade: 0.8});
                             top.layer.close(index);
                             top.layer.msg("请购单添加成功！");
                             layer.closeAll("iframe");

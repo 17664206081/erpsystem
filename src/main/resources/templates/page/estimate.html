@@ -15,7 +15,7 @@
 <blockquote class="layui-elem-quote news_search">
     <form class="layui-form">
         <div class="layui-inline">
-            <label class="layui-form-label" >门店</label>
+            <label class="layui-form-label">门店</label>
             <div class="layui-input-inline">
                 <select name="storeId" id="storeId" lay-search>
                     <option value="">请选择门店</option>
@@ -24,7 +24,7 @@
         </div>
 
         <div class="layui-inline">
-            <label class="layui-form-label" >物品</label>
+            <label class="layui-form-label">物品</label>
             <div class="layui-input-inline">
                 <select name="goodId" id="goodId" lay-search>
                     <option value="">请选择物品</option>
@@ -47,7 +47,7 @@
         </div>
 
         <div class="layui-inline" style="margin-left: 570px">
-            <button class="layui-btn layui-btn-normal"  lay-submit=""  lay-filter="search_btn">搜索</button>
+            <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="search_btn">搜索</button>
         </div>
     </form>
 </blockquote>
@@ -76,65 +76,65 @@
 <script th:src="@{/laydate/laydate.js}"></script>
 <script th:src="@{/layui/layui.js}"></script>
 <script>
-    layui.use(['form','laydate','laypage'], function() {
+    layui.use(['form', 'laydate', 'laypage'], function () {
         var form = layui.form(),
             laypage = layui.laypage,
-            laydate  = layui.laydate,
+            laydate = layui.laydate,
             $ = layui.jquery;
 
-        $.get("/store", function(data){
+        $.get("/store", function (data) {
             $.each(data, function (index) {
                 var id = data[index].id;
                 var value = data[index].name;
                 //构造动态option
-                $('#storeId').append("<option value='"+id+"'>"+value+"</option>")
+                $('#storeId').append("<option value='" + id + "'>" + value + "</option>")
             });
             form.render('select');
         });
 
 
-        $.get("/goods", function(data){
+        $.get("/goods", function (data) {
             $.each(data, function (index) {
                 var id = data[index].id;
                 var value = data[index].goodsName;
                 //构造动态option
-                $('#goodId').append("<option value='"+id+"'>"+value+"</option>")
+                $('#goodId').append("<option value='" + id + "'>" + value + "</option>")
             })
             form.render('select');
         });
 
         laydate.render({
-            elem : '#estimateDate',
+            elem: '#estimateDate',
             min: getNowFormatDate(1),
             range: true
         });
 
         laydate.render({
-            elem : '#consultDate',
+            elem: '#consultDate',
             max: getNowFormatDate(0),
             range: true
         });
 
-        function newsList(that){
+        function newsList(that) {
             //渲染数据
-            function renderDate(data,curr){
+            function renderDate(data, curr) {
                 var dataHtml = '';
-                if(!that){
-                    currData = newsData.concat().splice(curr*nums-nums, nums);
-                }else{
-                    currData = that.concat().splice(curr*nums-nums, nums);
+                if (!that) {
+                    currData = newsData.concat().splice(curr * nums - nums, nums);
+                } else {
+                    currData = that.concat().splice(curr * nums - nums, nums);
                 }
-                if(currData.length != 0){
-                    for(var i=0;i<currData.length;i++){
+                if (currData.length != 0) {
+                    for (var i = 0; i < currData.length; i++) {
                         dataHtml += '<tr>'
-                            +'<td>'+currData[i].estimateDate+'</td>'
-                            +'<td>'+currData[i].week+'</td>'
-                            +'<td>'+currData[i].goodsName+'</td>'
-                            +'<td>'+currData[i].consultBusiness+'</td>'
-                            +'<td>'+currData[i].estimateBusiness+'</td>'
-                            +'</tr>';
+                            + '<td>' + currData[i].estimateDate + '</td>'
+                            + '<td>' + currData[i].week + '</td>'
+                            + '<td>' + currData[i].goodsName + '</td>'
+                            + '<td>' + currData[i].consultBusiness + '</td>'
+                            + '<td>' + currData[i].estimateBusiness + '</td>'
+                            + '</tr>';
                     }
-                }else{
+                } else {
                     dataHtml = '<tr><td colspan="8">暂无数据</td></tr>';
                 }
                 return dataHtml;
@@ -142,15 +142,15 @@
 
             //分页
             var nums = 10; //每页出现的数据量
-            if(that){
+            if (that) {
                 newsData = that;
             }
             laypage({
-                cont : "page",
-                pages : Math.ceil(newsData.length/nums),
-                jump : function(obj){
-                    $(".news_content").html(renderDate(newsData,obj.curr));
-                    $('.news_list thead input[type="checkbox"]').prop("checked",false);
+                cont: "page",
+                pages: Math.ceil(newsData.length / nums),
+                jump: function (obj) {
+                    $(".news_content").html(renderDate(newsData, obj.curr));
+                    $('.news_list thead input[type="checkbox"]').prop("checked", false);
                     form.render();
                 }
             })
@@ -158,7 +158,7 @@
 
         function getNowFormatDate(days) {
             var date = new Date();
-            date.setDate(date.getDate()+days)
+            date.setDate(date.getDate() + days)
             var seperator1 = "-";
             var year = date.getFullYear();
             var month = date.getMonth() + 1;
@@ -173,17 +173,17 @@
             return currentdate;
         }
 
-        form.on("submit(search_btn)",function(data){
-            var field =data.field;
-            if(field.storeId==="" || field.goodId==="" || field. estimateDate==="" || field.consultDate==="" ){
+        form.on("submit(search_btn)", function (data) {
+            var field = data.field;
+            if (field.storeId === "" || field.goodId === "" || field.estimateDate === "" || field.consultDate === "") {
                 layer.msg("请输入必填参数");
-            }else{
+            } else {
                 $.ajax({
-                    url : "/estimate",
+                    url: "/estimate",
                     type: 'POST',
                     contentType: "application/json; charset=utf-8",
                     data: JSON.stringify(field),
-                    success : function(data){
+                    success: function (data) {
                         newsList(data);
                     }
                 });

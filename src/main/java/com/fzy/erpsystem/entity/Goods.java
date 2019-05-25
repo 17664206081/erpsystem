@@ -27,4 +27,8 @@ public class Goods {
 
     private BigDecimal stock;
 
+    private Long homeId;
+
+    private String ckName;
+
 }

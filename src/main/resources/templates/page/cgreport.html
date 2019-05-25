@@ -16,7 +16,7 @@
 
     <form class="layui-form">
         <div class="layui-inline">
-            <label class="layui-form-label" >门店名称</label>
+            <label class="layui-form-label">门店名称</label>
             <div class="layui-input-inline">
                 <select name="storeId" id="storeId" lay-search>
                     <option value="">请选择门店</option>
@@ -25,128 +25,208 @@
         </div>
 
         <div class="layui-inline">
-            <a class="layui-btn layui-btn-normal search_btn">搜索</a>
+            <label class="layui-form-label">仓库名称</label>
+            <div class="layui-input-inline">
+                <select lay-filter="homeId" name="homeId" id="homeId">
+                    <option value="">请仓库门店</option>
+                </select>
+            </div>
         </div>
+
+        <div class="layui-inline">
+            <label class="layui-form-label">物品</label>
+            <div class="layui-input-inline">
+                <select name="goodsId" id="goodsId" lay-search>
+                    <option value="">请选择物品(非必填)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-inline">
+            <label class="layui-form-label">报表日期</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" id="reportTime" name="reportTime" placeholder="请选择开始时间">
+            </div>
+        </div>
+
+        <div class="layui-inline" style="margin-left: 20px">
+            <button id="test2" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="search_btn">生成报表</button>
+        </div>
+
     </form>
 
 </blockquote>
-<div class="layui-form news_list">
-    <table class="layui-table">
-        <colgroup>
-            <col>
-            <col>
-            <col>
-            <col>
-            <col>
-            <col>
-            <col>
-        </colgroup>
-        <thead>
-        <tr>
-            <th style="text-align: center"><input type="checkbox" name="" lay-skin="primary" lay-filter="allChoose" id="allChoose"></th>
-            <th style="text-align:center;">单号</th>
-            <th>门店名称</th>
-            <th>物品名称</th>
-            <th>供应商名称</th>
-            <th>数量</th>
-            <th>单价</th>
-            <th>金额</th>
-            <th>入库日期</th>
-        </tr>
-        </thead>
-        <tbody class="news_content"></tbody>
-    </table>
+
+<!--    图表-->
+<div id="speedChart">
+    <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+    <div id="speedChartMain" class="layui-form news_list" style="width: 1000px; height: 450px;margin: 0 auto;"></div>
 </div>
+
 <div id="page"></div>
+<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<script th:src="@{/laydate/laydate.js}"></script>
 <script th:src="@{/layui/layui.js}"></script>
+<script th:src="@{/echarts/echarts.min.js}"></script>
+
 <script>
-    layui.use(['form','layer','jquery','laypage'], function() {
+    layui.use(['form', 'layer', 'jquery', 'laypage', 'laydate'], function () {
         var form = layui.form(),
             laypage = layui.laypage,
             layer = parent.layer === undefined ? layui.layer : parent.layer,
             $ = layui.jquery;
 
-        $.get("/store", function(data){
+        $.get("/store", function (data) {
             $.each(data, function (index) {
                 var id = data[index].id;
                 var value = data[index].name;
                 //构造动态option
-                $('#storeId').append("<option value='"+id+"'>"+value+"</option>")
+                $('#storeId').append("<option value='" + id + "'>" + value + "</option>")
             });
             form.render('select');
         });
 
-        //加载数据
-        $.get("/report/cg?storeId=", function(data){
-            newsList(data);
+        $.get("/shome", function (data) {
+            $.each(data, function (index) {
+                var id = data[index].homeId;
+                var value = data[index].ckName;
+                //构造动态option
+                $('#homeId').append("<option value='" + id + "'>" + value + "</option>");
+            })
+            form.render('select');
         });
 
-        function newsList(that){
-            //渲染数据
-            function renderDate(data,curr){
-                var dataHtml = '';
-                if(!that){
-                    currData = newsData.concat().splice(curr*nums-nums, nums);
-                }else{
-                    currData = that.concat().splice(curr*nums-nums, nums);
-                }
-                if(currData.length != 0){
-                    for(var i=0;i<currData.length;i++){
-                        dataHtml += '<tr>'
-                            +'<td align="center"><input type="checkbox" name="checked" lay-skin="primary" lay-filter="choose"></td>'
-                            +'<td align="left">'+currData[i].id+'</td>'
-                            +'<td>'+currData[i].storeName+'</td>'
-                            +'<td>'+currData[i].goodsName+'</td>'
-                            +'<td>'+currData[i].supplierName+'</td>'
-                            +'<td>'+currData[i].goodsAmt+'</td>'
-                            +'<td>'+currData[i].goodsPrice+'</td>'
-                            +'<td>'+accMul(currData[i].goodsAmt,currData[i].goodsPrice)+'</td>'
-                            +'<td>'+currData[i].buseDate+'</td>'
-                            +'</tr>'
+        var goods = [];
+        //加载物品
+        form.on('select(homeId)', function (data) {
+            $.get("/goods/find?homeId=" + $('#homeId').find("option:selected").val()+"&supplierId=0", function (data) {
+                goods = data;
+                //清空
+                $('#goodsId').empty("");
+                $('#goodsId').append("<option value=0>请选择物品</option>")
+                $.each(data, function (index) {
+                    var id = data[index].id;
+                    var value = data[index].goodsName;
+                    //构造动态option
+                    $('#goodsId').append("<option value='" + id + "'>" + value + "</option>")
+                })
+                form.render('select');
+            });
+        });
+
+        // $.get("/goods", function (data) {
+        //     $.each(data, function (index) {
+        //         var id = data[index].id;
+        //         var value = data[index].goodsName;
+        //         //构造动态option
+        //         $('#goodsId').append("<option value='" + id + "'>" + value + "</option>")
+        //     })
+        //     form.render('select');
+        // });
+
+        laydate.render({
+            elem: '#reportTime',
+            min: getNowFormatDate(30),
+            range: true
+        });
+
+        function getNowFormatDate(days) {
+            var date = new Date();
+            date.setDate(date.getDate() - days)
+            var seperator1 = "-";
+            var year = date.getFullYear();
+            var month = date.getMonth() + 1;
+            var strDate = date.getDate();
+            if (month >= 1 && month <= 9) {
+                month = "0" + month;
+            }
+            if (strDate >= 0 && strDate <= 9) {
+                strDate = "0" + strDate;
+            }
+            var currentdate = year + seperator1 + month + seperator1 + strDate;
+            return currentdate;
+        }
+
+        form.on("submit(search_btn)", function (data) {
+            var field = data.field;
+            if (field.storeId === "" || field.homeId === "" || field.reportTime === "") {
+                layer.msg("请输入必填参数");
+            } else {
+                $.ajax({
+                    url: "/report/cgd?type=RK",
+                    type: 'POST',
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(field),
+                    success: function (data) {
+                        setList(data);
                     }
-                }else{
-                    dataHtml = '<tr><td colspan="8">暂无数据</td></tr>';
-                }
-                return dataHtml;
+                });
             }
-
-            //分页
-            var nums = 10; //每页出现的数据量
-            if(that){
-                newsData = that;
-            }
-            laypage({
-                cont : "page",
-                pages : Math.ceil(newsData.length/nums),
-                jump : function(obj){
-                    $(".news_content").html(renderDate(newsData,obj.curr));
-                    $('.news_list thead input[type="checkbox"]').prop("checked",false);
-                    form.render();
-                }
-            })
-        }
-
-        function accMul(num1,num2){
-            var m=0,s1=num1.toString(),s2=num2.toString();
-            try{m+=s1.split(".")[1].length}catch(e){};
-            try{m+=s2.split(".")[1].length}catch(e){};
-            return Number(s1.replace(".",""))*Number(s2.replace(".",""))/Math.pow(10,m);
-        }
-
-        //查询
-        $(".search_btn").click(function(){
-            var index = layer.msg('查询中，请稍候',{icon: 16,time:false,shade:0.8});
-            $.ajax({
-                url : "/report/cg?storeId="+ $('#storeId option:selected').val(),
-                type : "get",
-                success : function(data){
-                    newsList(data);
-                }
-            })
-            layer.close(index);
+            return false;
         });
 
     })
+
 </script>
+
+<!-- 图表js -->
+<script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('speedChartMain'));
+
+    //加载数据
+    function setList(newdata) {
+        var jslength=0;
+        for(var js2 in newdata){
+            jslength++;
+        }
+        var Name = [];
+        var Time = newdata[0].stringTime;
+        var series=[];
+        for(var i =0;i<jslength;i++){
+            Name.push(newdata[i].goodsName);
+            series.push({
+                name: newdata[i].goodsName,
+                type: 'line',
+                data: newdata[i].numDate
+            });
+        }
+        option = {
+            title: {
+                text: '采购报表'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: Name
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: Time
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: series
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    }
+
+</script>
+
 </body>
 </html>
